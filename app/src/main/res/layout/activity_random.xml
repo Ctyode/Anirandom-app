@@ -23,7 +23,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_random"/>
+    <include layout="@layout/content_random"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <!--<android.support.design.widget.FloatingActionButton-->
         <!--android:id="@+id/fab"-->
