@@ -27,8 +27,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class RandomActivity extends AppCompatActivity {
 
@@ -74,7 +76,23 @@ public class RandomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    HttpRequest httpRequest = new HttpRequest(new URL("http://192.168.0.103:8080/anirandom.json"), new HttpRequest.HttpRequestCallback() {
+                    String genre = ((Spinner) findViewById(R.id.genre)).getSelectedItem().toString();
+                    if("Genre".equals(genre)) {
+                        genre = "undefined";
+                    }
+                    String year = ((Spinner) findViewById(R.id.year)).getSelectedItem().toString();
+                    if("Year".equals(year)) {
+                        year = "undefined";
+                    }
+                    String rating = ((Spinner) findViewById(R.id.rating)).getSelectedItem().toString();
+                    if("Rating".equals(rating)) {
+                        rating = "undefined";
+                    }
+                    String httpRequestString = String.format("http://192.168.0.103:8080/anirandom.json?genre=%s&year=%s&rating=%s",
+                                                             URLEncoder.encode(genre, "UTF-8"),
+                                                             URLEncoder.encode(year, "UTF-8"),
+                                                             URLEncoder.encode(rating, "UTF-8"));
+                    HttpRequest httpRequest = new HttpRequest(new URL(httpRequestString), new HttpRequest.HttpRequestCallback() {
                         @Override
                         public void success(String data) {
                             try {
@@ -106,7 +124,7 @@ public class RandomActivity extends AppCompatActivity {
                         }
                     });
                     httpRequest.start();
-                } catch (MalformedURLException e) {
+                } catch (MalformedURLException | UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
