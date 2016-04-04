@@ -1,8 +1,10 @@
-package com.flamie.anirandom;
+package com.flamie.anirandom.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.flamie.anirandom.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

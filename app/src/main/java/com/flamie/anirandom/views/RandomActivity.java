@@ -1,8 +1,12 @@
-package com.flamie.anirandom;
+package com.flamie.anirandom.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,23 +15,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
+import com.flamie.anirandom.HttpRequest;
+import com.flamie.anirandom.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class RandomActivity extends AppCompatActivity {
+
+    private Handler handler;
+    private Bitmap imageBitmap;
+    private String titleText;
+    private String synopsisText;
+    private Double ratingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,21 @@ public class RandomActivity extends AppCompatActivity {
 //        });
 
         Button randomize = (Button) findViewById(R.id.randomize);
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                imageView.setImageBitmap(imageBitmap);
+                TextView titleTextView = (TextView) findViewById(R.id.title_text);
+                titleTextView.setText(titleText);
+                TextView synopsisTextView = (TextView) findViewById(R.id.synopsis_text);
+                synopsisTextView.setText(synopsisText);
+                TextView ratingTextView = (TextView) findViewById(R.id.rating_text);
+                ratingTextView.setText(ratingText.toString());
+                return false;
+            }
+        });
+
         randomize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,13 +77,32 @@ public class RandomActivity extends AppCompatActivity {
                     HttpRequest httpRequest = new HttpRequest(new URL("http://192.168.0.103:8080/anirandom.json"), new HttpRequest.HttpRequestCallback() {
                         @Override
                         public void success(String data) {
-                            System.out.println(data);
-                            System.out.println("ебни, просто ебни");
+                            try {
+                                JSONObject jsonObject = new JSONObject(data);
+                                String image = jsonObject.getString("image");
+                                String title = jsonObject.getString("title");
+                                String synopsis = jsonObject.getString("synopsis");
+                                Double rating = jsonObject.getDouble("rating");
+                                URL url = new URL(image);
+                                titleText = title;
+                                synopsisText = synopsis;
+                                ratingText = rating;
+                                imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                handler.sendMessage(new Message());
+                            } catch (IOException | JSONException e) {
+                                Log.e(getClass().getName(), "наебнулось не все", e);
+                            }
                         }
 
                         @Override
                         public void error(Exception e) {
                             Log.e(getClass().getName(), "все наебнулось", e);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), R.string.no_connection_error, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     });
                     httpRequest.start();
@@ -89,8 +132,6 @@ public class RandomActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_random, menu);
@@ -116,4 +157,5 @@ public class RandomActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

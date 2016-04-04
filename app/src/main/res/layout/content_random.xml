@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,43 +10,71 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.flamie.anirandom.RandomActivity"
+    tools:context=".views.RandomActivity"
     tools:showIn="@layout/activity_random">
 
-    <Button
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Randomize"
-        android:id="@+id/randomize"
-        android:layout_marginTop="110dp"
+        android:id="@+id/genre"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/genre"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/year"
         android:layout_below="@+id/genre"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_centerHorizontal="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rating"
-        android:layout_marginTop="20dp"
         android:layout_below="@+id/year"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Randomize"
+        android:id="@+id/randomize"
+        android:layout_below="@+id/rating"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="175dp"
+        android:id="@+id/imageView"
+        android:layout_below="@+id/randomize"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/title_text"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/synopsis_text"
+        android:layout_below="@+id/title_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/rating_text"
+        android:layout_below="@+id/synopsis_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

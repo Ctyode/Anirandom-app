@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Anirandom</string>
     <string name="action_settings">Settings</string>
+    <string name="no_connection_error">Can\'t connect to the server</string>
 
     <string-array name="genre">
         <item>Mercury</item>
